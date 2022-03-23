@@ -21,6 +21,7 @@ async function loadCitys() {
   container.appendChild(card);
 
   console.log(mosques);
+
   for (let elements of mosques) {
     for (element of elements) {
       console.log(element.mosque);
@@ -35,33 +36,37 @@ async function loadCitys() {
       const asr = newElements("li", { innerText: 'asr : ' + element.salat.asr });
       const maghreb = newElements("li", { innerText: 'maghreb : ' + element.salat.maghreb });
       const icha = newElements("li", { innerText: 'icha : ' + element.salat.icha });
-      
-      if(element.jumua.vendredi == null){
-      const jumua = newElements("li", { innerText: 'jumu3a : ' + 'pas de jumua' });
-      card.appendChild(title);
-      card.appendChild(localisation);
-      card.appendChild(horaires);
-      horaires.appendChild(fajr);
-      horaires.appendChild(shourouk);
-      horaires.appendChild(dhor);
-      horaires.appendChild(asr);
-      horaires.appendChild(maghreb);
-      horaires.appendChild(icha);
-      horaires.appendChild(jumua);
-     }else{
-       const jumua = newElements("li", { innerText: 'jumu3a : ' + element.jumua.vendredi });
-       card.appendChild(title);
-       card.appendChild(localisation);
-      card.appendChild(horaires);
-      horaires.appendChild(fajr);
-      horaires.appendChild(shourouk);
-      horaires.appendChild(dhor);
-      horaires.appendChild(asr);
-      horaires.appendChild(maghreb);
-      horaires.appendChild(icha);
-      horaires.appendChild(jumua);
-     }    
-      
+
+      if (element.jumua.vendredi == null) {
+
+        const jumua = newElements("li", { innerText: 'jumu3a : ' + 'pas de jumua' });
+
+        card.appendChild(title);
+        card.appendChild(localisation);
+        card.appendChild(horaires);
+        horaires.appendChild(fajr);
+        horaires.appendChild(shourouk);
+        horaires.appendChild(dhor);
+        horaires.appendChild(asr);
+        horaires.appendChild(maghreb);
+        horaires.appendChild(icha);
+        horaires.appendChild(jumua);
+      } else {
+
+        const jumua = newElements("li", { innerText: 'jumu3a : ' + element.jumua.vendredi });
+
+        card.appendChild(title);
+        card.appendChild(localisation);
+        card.appendChild(horaires);
+        horaires.appendChild(fajr);
+        horaires.appendChild(shourouk);
+        horaires.appendChild(dhor);
+        horaires.appendChild(asr);
+        horaires.appendChild(maghreb);
+        horaires.appendChild(icha);
+        horaires.appendChild(jumua);
+      }
+
 
     }
   }
@@ -115,20 +120,29 @@ async function loadCitys() {
 //loadCitys();
 
 let submitBtn = document.querySelector("#getMosqueOfCitys");
+let city = "";
+let cityInput = document.querySelector(".city-input").value;
+let lastInput = cityInput;
 
-function submitChannel() {
-  const cityInput = document.querySelector(".city-input").value;
-  fetch("http://localhost:3000/mosques", {
+
+async function submitChannel(cityArg) {
+  let cityInputClient = cityArg;
+  fetch("http://localhost:3000/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ cityInput }),
+    body: JSON.stringify({ cityInputClient }),
   });
+  console.log(cityInputClient)
 }
+submitBtn.addEventListener("click", function () {
+  // e.preventDefault();
+  submitChannel(document.querySelector(".city-input").value);
+  document.querySelector(".container").innerHTML = "";
+  setTimeout(() => {
+    loadCitys();
+    document.querySelector(".city-input").value = "";
+  }, 1000);
 
-submitBtn.addEventListener("click", function() {
- // e.preventDefault();
-  submitChannel();
-  loadCitys();
 });

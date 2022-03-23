@@ -15,16 +15,22 @@ app.use(function (req, res, next) {
 let city;
 let cityInput;
 app.get("/mosques", async (req, res) => {
-   city = await scrapeDataAPI.getDataAPI(cityInput);
+  console.log(" cityInput 2 :  " + await cityInput)
+
+  city = await scrapeDataAPI.getDataAPI(cityInput);
+
+  res.send(city);
+
+
 
   //console.log(mosques);
-  res.send(city);
 });
 
-app.post("/mosques", async (req, res) => {
+app.post("/", async (req, res) => {
   //console.log(req.body);
-  cityInput = await req.body.cityInput;
-  console.log(cityInput);
+  cityInput = await req.body.cityInputClient;
+
+  console.log("Ville : " + cityInput);
   //res.send("Hello World!");
 });
 
